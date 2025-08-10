@@ -1,0 +1,243 @@
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: linear-gradient(180deg, #b4cde9 0%, #0f1c2e 100%);
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    margin: 0;
+    padding: 0;
+}
+
+.dashboard-container {
+    display: flex;
+    width: 800px;
+    height: 750px;
+    margin: 32px auto;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+    padding: 5px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 20px;
+}
+
+.main-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 60px;
+    border-bottom: 1px solid #e0e6ed;
+    margin-bottom: 12px;
+    padding: 0 6px;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.platform-name {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2b4666;
+}
+
+.header-nav {
+    display: flex;
+    align-items: center;
+}
+
+.header-nav a {
+    color: #2b4666;
+    text-decoration: none;
+    margin-left: 32px;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.user-summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 21px;
+   padding: 10px 20px;
+    border-bottom: 1px solid #e0e6ed;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    width: 350px;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    background: #eaf2fb;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    margin-right: 16px;
+    color: #4285f4;
+}
+
+.user-name {
+    font-weight: 500;
+    font-size: 1.1rem;
+    color: #222;
+}
+
+.user-email {
+    color: #8ca0b3;
+    font-size: 0.9rem;
+}
+
+.exam-info {
+    display: flex;
+    gap: 40px;
+    align-items: center;
+    font-size: 0.9rem;
+    margin-right: 10px;
+    
+}
+
+.exam-info > div {
+    text-align: left;
+    color: #2b4666;
+}
+
+.tabs-section {
+    display: flex;
+    gap: 15px;
+    margin: 28px 0 28px 22px;
+}
+
+.tab {
+    background: #eaf2fb;
+    border: none;
+    border-radius: 18px;
+    padding: 8px 20px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2b4666;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(44, 62, 80, 0.04);
+    transition: background 0.2s, color 0.2s;
+}
+
+.tab.active, .tab:hover {
+    background: #b3d1fa;
+    color: #222;
+}
+
+.overview-section {
+    display: flex;
+    gap: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.overview-card {
+    background: #f7fbff;
+    border-radius: 18px;
+    box-shadow: 0 4px 16px rgba(44, 62, 80, 0.06);
+    padding: 10px;
+    min-width: 351px;
+    min-height: 351px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.overview-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #2b4666;
+}
+
+.donut-chart {
+    margin-bottom: 20px;
+    height: 200px;
+    width: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.marks {
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-bottom: 12px;
+    color: #2b4666;
+}
+
+.stats-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.stats-list li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    font-weight: 500;
+    margin-bottom: 12px;
+    color: #2b4666;
+    width: 100%;
+    word-spacing: 2px;
+    text-align: left;
+}
+
+.dot {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.dot.correct {
+    background: #4285f4;
+}
+
+.dot.wrong {
+    background: #ea4335;
+}
+
+.dot.unsolved {
+    background: #bdbdbd;
+}
+
+.dashboard-footer {
+    margin-top: auto;
+    text-align: center;
+    color: #8ca0b3;
+    font-size: 1rem;
+    padding: 15px;
+    font-weight: 500;
+}

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Round</title>
+    <!-- Link to your CSS file -->
+    <link rel="stylesheet" href="Dashboard.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        
+        <main class="main-content"> 
+        <header class="main-header">
+    <div class="logo-title">
+        <span class="platform-name">🧩 Coding Round</span>
+    </div>
+    <nav class="header-nav">
+        <a href="https://9teeninitiative.com/about.html" target="_blank">About us</a>
+        <a href="https://9teeninitiative.com/contact.html" target="_blank">Contact</a>
+    </nav>
+</header>
+
+            <section class="user-summary">
+                <div class="user-info">
+                    <div class="user-avatar">👤</div>
+                    <div style="width: 276px;">
+                        <div class="user-name">John Doe</div>
+                        <div class="user-email">john.doe@example.com</div>
+                    </div>
+                </div>
+                <div class="exam-info">
+                    <div><strong>LANGUAGE</strong><br><span class="language-display">C++</span></div>
+                    <div><strong>STATUS</strong><br><span class="exam-status-display">Completed</span></div>
+                    <div><strong>DATE</strong><br><span class="exam-date-display">2025-07-29</span></div>
+                            
+                </div>
+            </section>
+            <section class="tabs-section">
+                <button class="tab active">Exam Overview</button>
+               
+            </section>
+            <section class="overview-section">
+                <div class="overview-card">
+                    <div class="overview-title">Exam Overview</div>
+                    <div class="donut-chart">
+                        <!-- SVG Donut Chart -->
+                        <svg width="280px" height="280px" viewBox="0 0 120 120">
+                            <circle cx="60" cy="60" r="48" fill="none" stroke="#e0e0e0" stroke-width="14" />
+                            <circle cx="60" cy="60" r="48" fill="none" stroke="#4285f4" stroke-width="14" stroke-dasharray="0 200" stroke-dashoffset="0" />
+                            <circle cx="60" cy="60" r="48" fill="none" stroke="#ea4335" stroke-width="14" stroke-dasharray="0 200" stroke-dashoffset="0" />
+                        </svg>
+                    </div>
+                    <div class="marks">Total marks : </div>
+                    <ul class="stats-list">
+                        <li><span class="dot correct"></span>Correct Answers: </li>
+                        <li><span class="dot wrong"></span>Wrong Answers: </li>
+                        <li><span class="dot unsolved"></span>Not Attempted: </li>
+                    </ul>
+                </div>
+            
+            </section>
+            <footer class="dashboard-footer">
+                for any query email us at admin@gmail.com
+            </footer>
+        </main>
+    </div>
+
+    <!-- JavaScript to fetch and display data -->
+    <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+        // Retrieve candidate email and name from local storage
+        const candidateEmail = localStorage.getItem('userEmail');
+        const userName = localStorage.getItem('userName');
+
+        // Select elements to update
+        const userNameElem = document.querySelector('.user-name');
+        const userEmailElem = document.querySelector('.user-email');
+        const languageDisplayElem = document.querySelector('.language-display');
+        const examStatusDisplayElem = document.querySelector('.exam-status-display');
+        const examDateDisplayElem = document.querySelector('.exam-date-display');
+        const totalScoreElem = document.querySelector('.marks');
+        const correctAnswersElem = document.querySelector('.stats-list li:nth-child(1)');
+        const wrongAnswersElem = document.querySelector('.stats-list li:nth-child(2)');
+        const unsolvedQuestionsElem = document.querySelector('.stats-list li:nth-child(3)');
+        const overviewCard = document.querySelector('.overview-card');
+
+        // SVG Donut Chart elements
+        const svgCircleCorrect = document.querySelector('.donut-chart circle:nth-child(2)');
+        const svgCircleWrong = document.querySelector('.donut-chart circle:nth-child(3)');
+
+        if (!candidateEmail) {
+            overviewCard.innerHTML = `<p class="error-message">Error: User session not found. Please log in and take the exam again.</p>`;
+            return;
+        }
+
+        // Debug: Show what data is available
+        console.log('Available localStorage data:', {
+            userEmail: localStorage.getItem('userEmail'),
+            userName: localStorage.getItem('userName'),
+            registrationId: localStorage.getItem('registrationId')
+        });
+
+        try {
+            // Fetch the test result from your backend using the new endpoint
+            console.log('Fetching results for email:', candidateEmail);
+            const response = await fetch(`http://localhost:5000/api/user/results?email=${candidateEmail}`);
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Response data:', data);
+
+            if (response.ok) {
+                // Update user info
+                userNameElem.textContent = userName || 'User Name';
+                userEmailElem.textContent = data.candidateEmail;
+
+                // Update exam info
+                languageDisplayElem.textContent = data.language || 'C++';
+                examStatusDisplayElem.textContent = data.status || 'Completed';
+                const submissionDate = new Date(data.submittedAt).toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                examDateDisplayElem.textContent = submissionDate;
+
+                // Update marks and stats
+                totalScoreElem.textContent = `Total marks : ${data.totalScore || 0}/100`; // Assuming max score is 100
+                correctAnswersElem.innerHTML = `<span class="dot correct"></span>Correct Answers: ${data.correctAnswers || 0}`;
+                wrongAnswersElem.innerHTML = `<span class="dot wrong"></span>Wrong Answers: ${data.wrongAnswers || 0}`;
+                unsolvedQuestionsElem.innerHTML = `<span class="dot unsolved"></span>Not Attempted: ${data.unsolvedQuestions || 0}`;
+
+                // Update Donut Chart
+                const correctAnswers = data.correctAnswers || 0;
+                const wrongAnswers = data.wrongAnswers || 0;
+                const unsolvedQuestions = data.unsolvedQuestions || 0;
+                const totalQuestions = correctAnswers + wrongAnswers + unsolvedQuestions;
+
+                if (totalQuestions > 0) {
+                    const correctPercentage = (correctAnswers / totalQuestions);
+                    const wrongPercentage = (wrongAnswers / totalQuestions);
+
+                    const circumference = 2 * Math.PI * 48; // Radius is 48 from your CSS
+
+                    const correctDash = correctPercentage * circumference;
+                    const wrongDash = wrongPercentage * circumference;
+                    
+                    // Correct segment (blue)
+                    if (svgCircleCorrect) {
+                        svgCircleCorrect.setAttribute('stroke-dasharray', `${correctDash} ${circumference}`);
+                        svgCircleCorrect.setAttribute('stroke-dashoffset', `0`);
+                    }
+
+                    // Wrong segment (red)
+                    if (svgCircleWrong) {
+                        svgCircleWrong.setAttribute('stroke-dasharray', `${wrongDash} ${circumference}`);
+                        svgCircleWrong.setAttribute('stroke-dashoffset', `-${correctDash}`);
+                    }
+                } else {
+                    // Handle case with no questions or zero total questions
+                    if (svgCircleCorrect) svgCircleCorrect.setAttribute('stroke-dasharray', '0 200');
+                    if (svgCircleWrong) svgCircleWrong.setAttribute('stroke-dasharray', '0 200');
+                }
+            } else {
+                overviewCard.innerHTML = `<p>Error: ${data.message || 'Failed to fetch results.'}</p>`;
+            }
+        } catch (error) {
+            console.error('Error during fetch operation:', error);
+            overviewCard.innerHTML = `<p>Network Error: Could not connect to server. Please ensure the backend is running.</p>`;
+        }
+    });
+</script>

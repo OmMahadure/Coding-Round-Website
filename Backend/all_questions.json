@@ -1,0 +1,180 @@
+[
+  {
+    "questionNumber": 1,
+    "title": "Check Even or Odd",
+    "description": "Write a program that checks whether a given number is even or odd.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "7", "expectedOutput": "Odd" },
+      { "input": "4", "expectedOutput": "Even" },
+      { "input": "0", "expectedOutput": "Even" },
+      { "input": "-3", "expectedOutput": "Odd" }
+    ],
+    "difficulty": "Easy",
+    "topic": "Conditionals"
+    },
+  {
+    "questionNumber": 2,
+    "title": "Reverse a String",
+    "description": "Write a function that reverses a given string.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "hello", "expectedOutput": "olleh" },
+      { "input": "world", "expectedOutput": "dlrow" },
+      { "input": "JavaScript", "expectedOutput": "tpircSavaJ" },
+      { "input": "Else", "expectedOutput": "elsE" }
+    ],
+    "difficulty": "Easy",
+    "topic": "Strings"
+  },
+  {
+    "questionNumber": 3,
+    "title": "Factorial Calculation",
+    "description": "Write a function to calculate the factorial of a non-negative integer.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "0", "expectedOutput": "1" },
+      { "input": "1", "expectedOutput": "1" },
+      { "input": "5", "expectedOutput": "120" },
+      { "input": "7", "expectedOutput": "5040" }
+    ],
+    "difficulty": "Medium",
+    "topic": "Recursion"
+  },
+  {
+    "questionNumber": 4,
+    "title": "Check Palindrome",
+    "description": "Write a function that checks if a given string is a palindrome (reads the same forwards and backwards, ignoring case and non-alphanumeric characters).",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "madam", "expectedOutput": "true" },
+      { "input": "A man, a plan, a canal: Panama", "expectedOutput": "true" },
+      { "input": "racecar", "expectedOutput": "true" },
+      { "input": "hello", "expectedOutput": "false" },
+      { "input": "No lemon, no melon", "expectedOutput": "true" }
+    ],
+    "difficulty": "Medium",
+    "topic": "Strings"
+  },
+  {
+    "questionNumber": 5,
+    "title": "Sum of Array Elements",
+    "description": "Write a function that calculates the sum of all numbers in an array.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "[1, 2, 3, 4, 5]", "expectedOutput": "15" },
+      { "input": "[]", "expectedOutput": "0" },
+      { "input": "[10]", "expectedOutput": "10" },
+      { "input": "[-1, 0, 1]", "expectedOutput": "0" },
+      { "input": "[100, 200]", "expectedOutput": "300" }
+    ],
+    "difficulty": "Easy",
+    "topic": "Arrays"
+  },
+  {
+    "questionNumber": 6,
+    "title": "Find Maximum Number",
+    "description": "Write a function that finds the maximum number in an array.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "[3, 7, 2, 9, 1]", "expectedOutput": "9" },
+      { "input": "[5]", "expectedOutput": "5" },
+      { "input": "[-10, -5, -20]", "expectedOutput": "-5" },
+      { "input": "[0, 0, 0]", "expectedOutput": "0" },
+      { "input": "[100, 200, 150, 300]", "expectedOutput": "300" }
+    ],
+    "difficulty": "Easy",
+    "topic": "Arrays"
+  },
+  {
+    "questionNumber": 7,
+    "title": "Count Vowels",
+    "description": "Write a function that counts the number of vowels in a given string.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "hello", "expectedOutput": "2" },
+      { "input": "world", "expectedOutput": "1" },
+      { "input": "aeiou", "expectedOutput": "5" },
+      { "input": "xyz", "expectedOutput": "0" },
+      { "input": "Programming", "expectedOutput": "3" }
+    ],
+    "difficulty": "Easy",
+    "topic": "Strings"
+  },
+  {
+    "questionNumber": 8,
+    "title": "Fibonacci Sequence",
+    "description": "Write a function that generates the nth number in the Fibonacci sequence.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "0", "expectedOutput": "0" },
+      { "input": "1", "expectedOutput": "1" },
+      { "input": "5", "expectedOutput": "5" },
+      { "input": "7", "expectedOutput": "13" },
+      { "input": "10", "expectedOutput": "55" }
+    ],
+    "difficulty": "Medium",
+    "topic": "Recursion"
+  },
+  {
+    "questionNumber": 9,
+    "title": "Remove Duplicates",
+    "description": "Write a function that removes duplicate elements from an array while preserving the order.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "[1, 2, 2, 3, 4, 4, 5]", "expectedOutput": "[1, 2, 3, 4, 5]" },
+      { "input": "[1, 1, 1, 1]", "expectedOutput": "[1]" },
+      { "input": "[]", "expectedOutput": "[]" },
+      { "input": "[1, 2, 3]", "expectedOutput": "[1, 2, 3]" },
+      { "input": "['a', 'b', 'a', 'c', 'b']", "expectedOutput": "['a', 'b', 'c']" }
+    ],
+    "difficulty": "Medium",
+    "topic": "Arrays"
+  },
+  {
+    "questionNumber": 10,
+    "title": "Valid Parentheses",
+    "description": "Write a function that checks if a string of parentheses is valid (properly closed and nested).",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "()", "expectedOutput": "true" },
+      { "input": "()[]{}", "expectedOutput": "true" },
+      { "input": "(]", "expectedOutput": "false" },
+      { "input": "([)]", "expectedOutput": "false" },
+      { "input": "{[]}", "expectedOutput": "true" },
+      { "input": "(((", "expectedOutput": "false" }
+    ],
+    "difficulty": "Medium",
+    "topic": "Stacks"
+  },
+  {
+    "questionNumber": 11,
+    "title": "Longest Common Subsequence",
+    "description": "Write a function that finds the length of the longest common subsequence between two strings.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "['ABCDGH', 'AEDFHR']", "expectedOutput": "3" },
+      { "input": "['AGGTAB', 'GXTXAYB']", "expectedOutput": "4" },
+      { "input": "['hello', 'world']", "expectedOutput": "2" },
+      { "input": "['abc', 'def']", "expectedOutput": "0" },
+      { "input": "['programming', 'algorithm']", "expectedOutput": "7" }
+    ],
+    "difficulty": "Hard",
+    "topic": "Dynamic Programming"
+  },
+  {
+    "questionNumber": 12,
+    "title": "Binary Tree Traversal",
+    "description": "Write a function that performs an in-order traversal of a binary tree and returns the values as an array.",
+    "note": "Prefer these input values only",
+    "testCases": [
+      { "input": "[1,null,2,3]", "expectedOutput": "[1,3,2]" },
+      { "input": "[]", "expectedOutput": "[]" },
+      { "input": "[1]", "expectedOutput": "[1]" },
+      { "input": "[1,2,3,4,5]", "expectedOutput": "[4,2,5,1,3]" },
+      { "input": "[1,2,3,4,5,6,7]", "expectedOutput": "[4,2,5,1,6,3,7]" }
+    ],
+    "difficulty": "Hard",
+    "topic": "Trees"
+  }
+]

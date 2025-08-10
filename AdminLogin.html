@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Login - Coding Round</title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --light-bg: #f8f9fa;
+      --bg: #f2f4f6;
+      --text-dark: #212529;
+      --text-secondary: #6c757d;
+      --step-bg: #e9ecef;
+      --error: #dc3545;
+      --success: #28a745;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin:0;
+      font-family: sans-serif;
+      color: var(--text-dark);
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #b4cde9 0%, #0f1c2e 100%);
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      height: 606px;
+      width: 580px;
+      margin: 40px;
+      background: var(--bg);
+      border-radius:10px;
+      overflow:hidden;
+      padding: 5px;
+    }
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background: var(--light-bg);
+      padding:15px 23px;
+    }
+    header .brand { 
+      font-weight:bold; 
+    }
+
+    header nav a {
+      margin-left:20px;
+      text-decoration:none;
+      color: var(--text-dark);
+      font-weight:500;
+    }
+    main {
+      padding:20px 25px;
+      text-align:center;
+      height: 92%;
+      width: 100%;
+    }
+    main h1 { font-size:1.8rem; margin-bottom:10px; width: 100%; text-align: center; }
+    main p { color: var(--text-secondary); margin-bottom:30px; width: 100%; text-align: center; }
+    
+    .login-form {
+      width: 95%;
+      height: 65%;
+      margin: 0 auto;
+      background: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    #adminLoginForm{
+      height: 92%;
+      width: 100%;
+    }
+    .form-group {
+      margin: 11px 0 29px 0;
+      text-align: left;
+    }
+    
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #e9ecef;
+      border-radius: 6px;
+      font-size: 1rem;
+      transition: border-color 0.3s ease;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+    
+    .btn {
+      padding:12px 24px;
+      background: var(--primary);
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:1rem;
+      margin:10px;
+      text-decoration: none;
+      display: inline-block;
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+    
+    .btn:hover{
+      background-color: #0056b3;
+    }
+    
+    .back-btn {
+      padding: 8px 16px;
+      background: var(--text-secondary);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 20px;
+      transition: background-color 0.3s ease;
+    }
+    
+    .back-btn:hover {
+      background-color: #5a6268;
+    }
+    
+    .error-message {
+      color: var(--error);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+    }
+    
+    .success-message {
+      color: var(--success);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🧩 Coding Round</div>
+      <nav>
+        <a href="https://9teeninitiative.com/about.html" target="_blank">About us</a>
+        <a href="https://9teeninitiative.com/contact.html" target="_blank">Contact</a>
+      </nav>
+    </header>
+    <main>
+      <h1>Admin Login</h1>
+      <p>Please enter your admin credentials to access the dashboard.</p>
+
+      <div class="login-form">
+        <form id="adminLoginForm">
+          <div class="form-group">
+            <label for="email">Email / Username</label>
+            <input type="text" id="email" name="email" placeholder="Enter your email or username" required>
+            <div class="error-message" id="email-error"></div>
+          </div>
+          
+          <div class="form-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            <div class="error-message" id="password-error"></div>
+          </div>
+          
+          <button type="submit" class="btn">Login</button>
+          <div class="success-message" id="success-message"></div>
+        </form>
+      </div>
+      
+      <a href="/LandingPage.html" class="back-btn">Back to Home</a>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      
+      // Reset error messages
+      document.querySelectorAll('.error-message').forEach(msg => msg.style.display = 'none');
+      document.getElementById('success-message').style.display = 'none';
+      
+      // Simple validation
+      let isValid = true;
+      
+      if (!email.trim()) {
+        document.getElementById('email-error').textContent = 'Email or username is required';
+        document.getElementById('email-error').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (!password.trim()) {
+        document.getElementById('password-error').textContent = 'Password is required';
+        document.getElementById('password-error').style.display = 'block';
+        isValid = false;
+      }
+      
+      if (isValid) {
+        // Send credentials to backend
+        fetch('http://localhost:5000/api/admin/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ email, password })
+        })
+        .then(response => response.json())
+        .then(data => {
+          if (data.message === 'Login successful') {
+            document.getElementById('success-message').textContent = 'Login successful! Redirecting...';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Redirect to admin dashboard
+            setTimeout(() => {
+              window.location.href = 'AdminDashboard.html';
+            }, 1500);
+          } else {
+            document.getElementById('email-error').textContent = 'Invalid email or password';
+            document.getElementById('email-error').style.display = 'block';
+          }
+        })
+        .catch(error => {
+          console.error('Login error:', error);
+          document.getElementById('email-error').textContent = 'Login failed. Please try again.';
+          document.getElementById('email-error').style.display = 'block';
+        });
+      }
+    });
+  </script>
+</body>
+</html>

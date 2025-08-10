@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coding Platform</title>
+    <link rel="stylesheet" href="CodingRound.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/monaco-editor/0.45.0/min/vs/loader.min.js"></script>
+
+</head>
+
+<body>
+    <div id="fullscreen-modal">
+        <h2>Start Exam in Fullscreen Mode</h2>
+        <button id="start-fullscreen-btn">Start Exam</button>
+        <h3>NOTE: TAB SWITCH IS STRICTLY PROHIBITED</h3>
+        <span>IF YOU SWITCH TABS DURING THE EXAM, YOUR EXAM WILL BE TERMINATED</span>
+    </div>
+    <div class="container">
+
+        <div class="taskbar">
+            <div class="icon">
+                <span class="icon-text">Coding Round</span>
+            </div>
+            <div class="language-box">
+                <span>Language</span>
+                <div class="language-buttons">
+                    <button class="lang-btn" id="btn-cpp" type="button" onclick="changeLanguage('cpp')">C++</button>
+                    <button class="lang-btn" id="btn-java" type="button" onclick="changeLanguage('java')">JAVA</button>
+                    <button class="lang-btn" id="btn-python" type="button" onclick="changeLanguage('python')">PYTHON</button>
+                    <button class="lang-btn" id="btn-javascript" type="button" onclick="changeLanguage('javascript')">JAVASCRIPT</button>
+                </div>
+            </div>
+            <div class="taskbar-right">
+                <div class="timecontainer">
+                    <div class="time" id="time">02:00:00</div>
+                </div>
+                <div class="finish-btn">
+                    <a href="Dashboard.html">
+                        <button class="f-btn" type="button" onclick="finishExam()">Finish Exam</button>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="sidebar">
+            <div class="box">
+                <div class="question-content">
+                    <div class="question-details">
+                        <div class="code-structure"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="Terminal">
+            <div class="subterminal">
+                <div class="monaco-editor" id="monaco-editor"></div>
+                <div class="output-terminal" id="monaco-output">
+                    <div class="output-header">
+                        <span>Output Console</span>
+                        <button type="button" onclick="runCode()" class="run-btn">▶ Run Code</button>
+                        <button type="button" onclick="clearOutput()" class="clear-btn">🗑️ Clear</button>
+                    </div>
+                </div>
+                <div class="Nextbtn"><button type="button" onclick="nextQuestion()">Next</button></div>
+                <div class="Subbtn"><button type="button" onclick="submitAnswer()">Submit</button></div>
+            </div>
+        </div>
+
+        <div class="checkbox">
+            <h3>QUESTION NAVIGATION</h3>
+
+            <div class="status-summary">
+                <div class="status-item">
+                    <div class="status-circle answered-status"></div>
+                    <span class="status-text">Answered: <span id="answeredCount">0</span></span>
+                </div>
+                <div class="status-item">
+                    <div class="status-circle visited-status"></div>
+                    <span class="status-text">Not Answered: <span id="visitedCount">0</span></span>
+                </div>
+                <div class="status-item">
+                    <div class="status-circle not-visited-status"></div>
+                    <span class="status-text">Not Visited: <span id="notVisitedCount">12</span></span>
+                </div>
+            </div>
+
+            <div class="Qcontainer">
+                <div class="circle" onclick="goToQuestion(1)" data-question="1">1</div>
+                <div class="circle" onclick="goToQuestion(2)" data-question="2">2</div>
+                <div class="circle" onclick="goToQuestion(3)" data-question="3">3</div>
+                <div class="circle" onclick="goToQuestion(4)" data-question="4">4</div>
+                <div class="circle" onclick="goToQuestion(5)" data-question="5">5</div>
+                <div class="circle" onclick="goToQuestion(6)" data-question="6">6</div>
+                <div class="circle" onclick="goToQuestion(7)" data-question="7">7</div>
+                <div class="circle" onclick="goToQuestion(8)" data-question="8">8</div>
+                <div class="circle" onclick="goToQuestion(9)" data-question="9">9</div>
+                <div class="circle" onclick="goToQuestion(10)" data-question="10">10</div>
+                <div class="circle" onclick="goToQuestion(11)" data-question="11">11</div>
+                <div class="circle" onclick="goToQuestion(12)" data-question="12">12</div>
+            </div>
+        </div>
+    </div>
+    <script src="CodingRound.js"> </script>
+
+</body>
+
+</html>

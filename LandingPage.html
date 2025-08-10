@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Coding Round </title>
+  <style>
+    :root {
+      --primary: #007bff;
+      --light-bg: #f8f9fa;
+      --bg: #f2f4f6;
+      --text-dark: #212529;
+      --text-secondary: #6c757d;
+      --step-bg: #e9ecef;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin:0;
+      font-family: sans-serif;
+      color: var(--text-dark);
+      height: 100vh;
+      width: 100vw;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(180deg, #b4cde9 0%, #0f1c2e 100%);
+      position: relative;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      width: 737px;
+      height: 730px;
+      margin: 90px auto ;
+      background: var(--bg);
+      border-radius:10px;
+      overflow:hidden;
+      position: relative;
+      padding: 5px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+    header {
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      background: var(--light-bg);
+      padding:15px 30px;
+    }
+    header .brand { font-weight:bold; }
+    header nav a {
+      margin-left:20px;
+      text-decoration:none;
+      color: var(--text-dark);
+      font-weight:500;
+    }
+    .steps {
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+      padding: 30px 20px;
+    }
+    .step {
+      display:flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .step .bubble {
+      width:40px;
+      height:40px;
+      border-radius:50%;
+      background: var(--step-bg);
+      color: var(--text-dark);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:600;
+      z-index:1;
+    }
+    .step.active .bubble {
+      background: var(--primary);
+      color:#fff;
+    }
+    .step .label {
+      margin-top:8px;
+      font-size:0.9rem;
+    }
+    .connector {
+      flex:1;
+      height:2px;
+      background: var(--text-dark);
+      margin: 0 -10px;
+      z-index:0;
+    }
+    main {
+      padding:15px 40px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    main h1 { font-size:1.8rem; margin-bottom:10px; }
+    main p { color: var(--text-secondary); margin-bottom:23px; }
+    .btn {
+      padding:12px 24px;
+      background: var(--primary);
+      color:#fff;
+      border:none;
+      border-radius:6px;
+      cursor:pointer;
+      font-size:1rem;
+      margin:10px;
+      text-decoration: none;
+      display: inline-block;
+    }
+    
+    .btn-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 1px;
+      margin-bottom: 1px;
+    }
+    .btn:hover{
+      background-color: #0056b3;
+    }
+    .checklist {
+      height: 329px;
+      text-align: left;
+      max-width:600px;
+    }
+    .item {
+      display:flex;
+      align-items:center;
+      margin:23px auto;
+      height: 70px;
+      width: 594px;
+      background-color:rgba(207, 203, 203, 0.171);
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .icon {
+      width:48px; height:48px;
+      background: var(--light-bg);
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-right:15px;
+      font-size:1.2rem;
+    }
+    .item-content .title {
+      font-weight:600;
+    }
+    .item-content .desc {
+      font-size:0.9rem;
+      color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🧩 Coding Round</div>
+      <nav>
+        <a href="https://9teeninitiative.com/about.html" target="_blank">About us</a>
+        <a href="https://9teeninitiative.com/contact.html" target="_blank">Contact</a>
+      </nav>
+    </header>
+
+    <div class="steps">
+      <div class="step active">
+        <div class="bubble">1</div>
+        <div class="label">System Requirements</div>
+      </div>
+      <div class="connector"></div>
+      <div class="step">
+        <div class="bubble">2</div>
+        <div class="label">User Registration</div>
+      </div>
+      <div class="connector"></div>
+      <div class="step">
+        <div class="bubble">3</div>
+        <div class="label">Terms and Guidelines</div>
+      </div>
+    </div>
+
+    <main>
+      <h1>System Requirements</h1>
+      <p>Before you start the coding test, we need to ensure your system meets the requirements.</p>
+
+
+      <div class="checklist">
+        <div class="item">
+          <div class="icon">🌐</div>
+          <div class="item-content">
+            <div class="title">Browser Version</div>
+            <div class="desc">Recommended: Latest version</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="icon">💻</div>
+          <div class="item-content">
+            <div class="title">Operating System</div>
+            <div class="desc">Recommended: Windows 10+, macOS 10.15+</div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="icon">📶</div>
+          <div class="item-content">
+            <div class="title">Internet Connection Speed</div>
+            <div class="desc">Recommended: 100 kbps+</div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-container">
+        <a href="/AdminLogin.html">
+          <button class="btn">Admin Login</button>
+        </a>
+        <a href="/RagistrationPage.html">
+          <button class="btn">User Registration</button>
+        </a>
+      </div>
+
+    </main>
+  </div>
+</body>
+</html>

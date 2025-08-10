@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <style>
+        :root {
+            --primary: #207BFF;
+            --bg: #F2F4F6;
+            --light: #EDEEF0;
+            --dark: #212529;
+            --input-bg: #fff;
+            --input-border: #ccd5db;
+            --label-color: #333;
+            --help-color: #6c757d;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: sans-serif;
+            background: linear-gradient(180deg, #b4cde9 0%, #0f1c2e 100%);
+            color: var(--dark);
+            height: 100vh;
+            width: 100vw;
+            position: relative;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            height: 85%;
+            width: 90%;
+            background: var(--bg);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--dark);
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #searchInput {
+            width: 100%;
+            max-width: 500px;
+            padding: 12px;
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .table-container {
+            width: 95%;
+            height: 84%;
+            margin: 20px 20px 0 20px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: white;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+            background: var(--primary);
+        }
+
+        tbody {
+            max-height: calc(100% - 50px);
+            overflow-y: auto;
+            display: block;
+        }
+
+        thead tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        tbody tr {
+            display: table;
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
+            background-color: var(--light);
+        }
+
+        #loading {
+            text-align: center;
+            padding: 20px;
+            color: var(--dark);
+        }
+
+        /* Responsive styles */
+        @media (max-width: 768px) {
+            .container {
+                width: 100%;
+                margin: 0;
+                padding: 15px;
+            }
+            #searchInput {
+                width: 100%;
+            }
+            table, thead, tbody, th, td, tr {
+                display: block;
+            }
+            thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            tr {
+                border: 1px solid #ddd;
+                margin-bottom: 10px;
+                border-radius: 6px;
+            }
+            td {
+                border: none;
+                border-bottom: 1px solid #ddd;
+                position: relative;
+                padding-left: 50%;
+                text-align: right;
+            }
+            td:before {
+                content: attr(data-label);
+                position: absolute;
+                left: 10px;
+                width: calc(50% - 20px);
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                color: #555;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Admin Dashboard</h1>
+        <div class="search-container">
+            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Search by name or email...">
+        </div>
+        <div id="loading">Loading data...</div>
+        <div class="table-container" id="tableContainer" style="display: none;">
+            <table id="dashboardTable">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Final Score</th>
+                        <th>Correct</th>
+                        <th>Incorrect</th>
+                        <th>Unsolved</th>
+                    </tr>
+                </thead>
+                <tbody id="dashboardBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let allUsersData = [];
+
+        document.addEventListener('DOMContentLoaded', fetchData);
+
+        async function fetchData() {
+            const loading = document.getElementById('loading');
+            const tableContainer = document.getElementById('tableContainer');
+            const tableBody = document.getElementById('dashboardBody');
+
+            try {
+                console.log('Fetching data from backend...');
+                const response = await fetch('http://localhost:5000/api/admin/dashboard');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                allUsersData = await response.json();
+                
+                console.log('Received data from backend:', allUsersData);
+                
+                loading.style.display = 'none';
+                tableContainer.style.display = 'block';
+                renderTable(allUsersData);
+
+            } catch (error) {
+                loading.textContent = `Error fetching data: ${error.message}`;
+                console.error('Error:', error);
+            }
+        }
+
+        function renderTable(data) {
+            const tableBody = document.getElementById('dashboardBody');
+            tableBody.innerHTML = ''; // Clear existing rows
+            
+            console.log('Rendering table with data:', data);
+            console.log('Number of users to render:', data.length);
+            
+            data.forEach((user, index) => {
+                console.log(`Rendering user ${index + 1}:`, user);
+                const row = tableBody.insertRow();
+                row.innerHTML = `
+                    <td data-label="Name">${user.name}</td>
+                    <td data-label="Email">${user.email}</td>
+                    <td data-label="Final Score">${user.finalScore}</td>
+                    <td data-label="Correct">${user.correctQuestions}</td>
+                    <td data-label="Incorrect">${user.incorrectQuestions}</td>
+                    <td data-label="Unsolved">${user.unsolvedQuestions}</td>
+                `;
+            });
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput');
+            const filter = input.value.toLowerCase();
+            
+            const filteredData = allUsersData.filter(user => {
+                return user.name.toLowerCase().includes(filter) || user.email.toLowerCase().includes(filter);
+            });
+
+            renderTable(filteredData);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Coding Round</title>
+  <link rel="stylesheet" href="/T&C.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">🧩 Online Coding Platform</div>
+      <nav><a href="https://9teeninitiative.com/about.html" target="_blank">About us</a>
+      <a href="https://9teeninitiative.com/contact.html" target="_blank">Contact</a></nav>
+    </header>
+
+    <div class="progress-container">
+      <div class="step">
+        <div class="circle">1</div>
+        <div class="label">System Requirements</div>
+      </div>
+      <div class="connector"></div>
+      <div class="step">
+        <div class="circle">2</div>
+        <div class="label">User Registration</div>
+      </div>
+      <div class="connector"></div>
+      <div class="step">
+        <div class="circle active">3</div>
+        <div class="label">Terms and Guidelines</div>
+      </div>
+    </div>
+
+    <main>
+      <h1>WELCOME</h1>
+      <p>You have successfully registered for the coding test. Please read the terms and guidelines to proceed</p>
+
+      <div class="terms-box">
+        <h2>TERMS AND GUIDELINES</h2>
+        <h3>TERMS</h3>
+        <li>Proceeding to the Test, you confirm that all the information provided is accurate.</li>
+        <li>You will <b>not be able to pause or restart the test</b> once it begins.</li>
+        <li>You will <b>not be able to use any external tools or libraries</b>.</li>
+
+        <h3>GUIDELINES</h3>
+        <li>You have <b>2 hours (120 minutes)</b> to complete the exam.</li>
+        <li>The exam consists of <b>12 coding questions.</b></li>
+        <li>Each correct answer awards <b>8 points.</b></li>
+        <li>Each incorrect answer deducts <b>0 points.</b></li>
+        <li>Unanswered questions award <b>0 points.</b></li>
+        <li>You can <b>navigate between questions</b> freely.</li>
+        <li>Your code will be <b>automatically saved.</b></li>
+        <li>The exam will <b>auto-submit</b> when time expires.</li>
+
+        <div class="terms-controls">
+          <input id="agree" type="checkbox" />
+          <label for="agree">I agree to the terms and guidelines</label>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <a href="RagistrationPage.html">
+        <button class="btn cancel">Back to Registration</button>
+        </a>
+        <a href="CodingRound.html" id="start-test-link" style="pointer-events: none; opacity: 0.5;">
+        <button class="btn" id="start-test-btn" disabled>Start Test</button>
+        </a>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    // Get elements
+    const agreeCheckbox = document.getElementById('agree');
+    const startTestBtn = document.getElementById('start-test-btn');
+    const startTestLink = document.getElementById('start-test-link');
+
+    // Function to update button state
+    function updateButtonState() {
+      if (agreeCheckbox.checked) {
+        startTestBtn.disabled = false;
+        startTestLink.style.pointerEvents = 'auto';
+        startTestLink.style.opacity = '1';
+        startTestBtn.style.cursor = 'pointer';
+      } else {
+        startTestBtn.disabled = true;
+        startTestLink.style.pointerEvents = 'none';
+        startTestLink.style.opacity = '0.5';
+        startTestBtn.style.cursor = 'not-allowed';
+      }
+    }
+
+    // Add event listener to checkbox
+    agreeCheckbox.addEventListener('change', updateButtonState);
+
+    // Initialize button state
+    updateButtonState();
+  </script>
+</body>
+</html>
