@@ -1,24 +1,24 @@
 
-let currentQuestion = 1;       // Current question number
-let timeLeft = 2 * 60 * 60;    // 2 hours in seconds
-let timerInterval;             // Timer interval reference
+let currentQuestion = 1;       
+let timeLeft = 2 * 60 * 60;    
+let timerInterval;             
 let lastExecutionTime = 0;
 const EXECUTION_COOLDOWN = 2000;
-let examStarted = false;       // Exam status flag
-let tabSwitchDetected = false; // Tab switch detection flag
-let preferredLanguage = 'cpp'; // User's preferred language (defaults to C++)
+let examStarted = false;       
+let tabSwitchDetected = false; 
+let preferredLanguage = 'cpp'; 
 let terminal;
 let inputEditor;
 // Question tracking sets
-let visitedQuestions = new Set();    // Questions user has seen
-let answeredQuestions = new Set();   // Questions user has submitted
+let visitedQuestions = new Set();    
+let answeredQuestions = new Set();   
 
 
 // ========================================
 // QUESTIONS DATA
 // ========================================
 
-// Global variable to store loaded questions
+
 let codingQuestions = [];
 
 // Function to load questions from JSON file
