@@ -9,7 +9,6 @@ let tabSwitchDetected = false;
 let preferredLanguage = 'cpp'; 
 let terminal;
 let inputEditor;
-// Question tracking sets
 let visitedQuestions = new Set();    
 let answeredQuestions = new Set();   
 
@@ -44,7 +43,7 @@ async function loadQuestionsFromJSON() {
 // MONACO EDITOR INITIALIZATION
 // ========================================
 
-// Language-specific Monaco editor language IDs (moved to top to avoid reference errors)
+// Language-specific Monaco editor language IDs 
 const languageMap = {
     python: 'python',
     cpp: 'cpp',
@@ -59,7 +58,7 @@ require.config({
     }
 });
 
-// Initialize Monaco editors after DOM is loaded
+
 function initializeMonacoEditors() {
     require(['vs/editor/editor.main'], function () {
         inputEditor = new MonacoInput('monaco-editor', 'cpp');
@@ -67,7 +66,7 @@ function initializeMonacoEditors() {
     });
 }
 
-//monaco input
+//Monaco Input Termial//
 
 class MonacoInput {
     constructor(containerId, language = "cpp") {
@@ -120,7 +119,7 @@ System.out.println("Hello, World!");
     }
 }
 
-//monaco output
+//Monaco output Teminal//
 
 class MonacoTerminal {
     constructor(containerId) {
@@ -162,7 +161,7 @@ class MonacoTerminal {
         this.editor.updateOptions({ readOnly: false });
         this.scrollToBottom();
 
-        // Move caret to end of the last line so typing happens after the prompt
+        
         const model = this.editor.getModel();
         const lastLine = model.getLineCount();
         const lastCol = model.getLineMaxColumn(lastLine);
@@ -174,16 +173,16 @@ class MonacoTerminal {
                 if (e.keyCode === monaco.KeyCode.Enter) {
                     e.preventDefault();
 
-                    // Read from the current last line to avoid stale cursor issues
+                    
                     const currentLastLine = model.getLineCount();
                     let lineText = model.getLineContent(currentLastLine);
 
-                    // Extract the portion after the prompt text
+                   
                     let inputValue = "";
                     if (lineText.startsWith(promptText)) {
                         inputValue = lineText.substring(promptText.length).trim();
                     } else {
-                        // Fallback: try to find prompt within the line, else take whole line
+                       
                         const idx = lineText.lastIndexOf(promptText);
                         inputValue = idx >= 0 ? lineText.substring(idx + promptText.length).trim() : lineText.trim();
                     }
@@ -210,15 +209,16 @@ class MonacoTerminal {
     }
 }
 
-// =================== JUDGE0 API ===================
+// =================== JUDGE0 API ===================//
+
 const JUDGE0_URL = "https://judge0-ce.p.rapidapi.com/submissions";
 const JUDGE0_HEADERS = {
     "Content-Type": "application/json",
-    "X-RapidAPI-Key": "b3d8964b7dmsh5508a324f6c801ep17a737jsncd4ce6525772",
+    "X-RapidAPI-Key": "your rapidapi key here",
     "X-RapidAPI-Host": "judge0-ce.p.rapidapi.com"
 };
 
-// Updated language IDs for Judge0 API
+
 const LANGUAGE_IDS = {
     cpp: 54,      // C++ (GCC 9.2.0)
     java: 62,     // Java (OpenJDK 13.0.1)
@@ -251,11 +251,11 @@ async function executeJudge0(languageId, code, stdin = "") {
         const submission = await createResponse.json();
         const token = submission.token;
 
-        // Wait for submission to complete
+       
         let result;
         let attempts = 0;
         const maxAttempts = 30;
-        const waitTime = 1000; // 1 second
+        const waitTime = 1000; 
 
         while (attempts < maxAttempts) {
             await new Promise(resolve => setTimeout(resolve, waitTime));
@@ -281,11 +281,9 @@ async function executeJudge0(languageId, code, stdin = "") {
         if (attempts >= maxAttempts) {
             throw new Error("Execution timeout - submission took too long to complete");
         }
-
-        // Handle different statuses
         const statusMap = {
-            3: "Success",      // Accepted
-            4: "Wrong Answer", // Wrong Answer
+            3: "Success",     
+            4: "Wrong Answer", 
             5: "Time Limit Exceeded",
             6: "Compilation Error",
             7: "Runtime Error",
@@ -313,33 +311,24 @@ async function executeJudge0(languageId, code, stdin = "") {
 // TIMER FUNCTIONS
 // ========================================
 
-// Update timer display every second
+
 function updateTimer() {
-    // Calculate hours, minutes, seconds
     const hours = Math.floor(timeLeft / 3600);
     const minutes = Math.floor((timeLeft % 3600) / 60);
     const seconds = timeLeft % 60;
-
-    // Format time as HH:MM:SS
     const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-
-    // Update timer display
     const timeElement = document.getElementById('time');
     if (timeElement) {
         timeElement.textContent = timeString;
     }
-
-    // Check if time is up
     if (timeLeft <= 0) {
         finishExam();
     } else {
-        timeLeft--; // Decrease time by 1 second
+        timeLeft--; 
     }
 }
 
-// Start the exam and timer
 function startExam() {
-    // Check if user has required data
     const userEmail = localStorage.getItem('userEmail');
     const userName = localStorage.getItem('userName');
     const registrationId = localStorage.getItem('registrationId');
@@ -352,26 +341,21 @@ function startExam() {
     
     examStarted = true;
     console.log("Exam started - tab switch detection is now active");
-    resetTabSwitchDetection(); // Reset tab switch detection
-    timerInterval = setInterval(updateTimer, 1000); // Update every second
-    updateTimer(); // Update immediately
+    resetTabSwitchDetection(); 
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer(); 
 
     
-
-    // Clear all saved code and output for all questions when starting new exam
     for (let i = 1; i <= codingQuestions.length; i++) {
         localStorage.removeItem(`question_${i}_code`);
         localStorage.removeItem(`question_${i}_output`);
     }
     
-
-    // Clear output terminal
     if (terminal) {
         terminal.clear();
         terminal.println('Click "Run Code" to execute your program...');
     }
 
-    // Set default language template in Monaco editor
     if (inputEditor) {
         inputEditor.setValue(inputEditor.getDefaultCode(preferredLanguage));
         // Ensure proper language highlighting
@@ -383,23 +367,18 @@ function startExam() {
 // QUESTION NAVIGATION FUNCTIONS
 // ========================================
 
-// Go to a specific question number
+
 function goToQuestion(questionId) {
-    // Check if question number is valid
+    
     if (questionId >= 1 && questionId <= codingQuestions.length) {
-        // Auto-save current question's code and output
         saveCode();
         saveOutput();
-        
         visitedQuestions.add(questionId);
         currentQuestion = questionId;
-
-        // Get question from the loaded JSON data
         const question = codingQuestions[questionId - 1];
 
         const questionContentDiv = document.querySelector('.question-content');
         if (questionContentDiv && question) {
-            // Format test cases as a list
             const testCasesHTML = question.testCases.map((testCase, index) => 
                 `<li><strong>Test Case ${index + 1}:</strong> Input: <code>${testCase.input}</code> → Expected Output: <code>${testCase.expectedOutput}</code></li>`
             ).join('');
@@ -421,16 +400,10 @@ function goToQuestion(questionId) {
                 </div>
             `;
         }
-
-        // Load saved code/output and honor submitted state
         loadCode(questionId);
-
-        // Determine active language for this question
         const savedLang = localStorage.getItem(`question_${questionId}_language`);
         const isSubmitted = answeredQuestions.has(questionId);
         const activeLangForQuestion = savedLang || preferredLanguage;
-
-        // Update button styles to show active language for this question
         document.querySelectorAll('.lang-btn').forEach(btn => {
             btn.style.backgroundColor = 'rgb(11, 107, 252)';
         });
@@ -444,17 +417,14 @@ function goToQuestion(questionId) {
         updateStatusCounters();
     }
 }
-// Update question navigation circle colors
+
 function updateQuestionNavigation(activeQuestion) {
     const circles = document.querySelectorAll('.circle');
 
     circles.forEach((circle, index) => {
         const questionId = index + 1;
-
-        // Remove all status classes
         circle.classList.remove('active', 'answered', 'visited');
-
-        // Add appropriate status class based on question state
+        
         if (answeredQuestions.has(questionId)) {
             circle.classList.add('answered');        // Green - answered
         } else if (visitedQuestions.has(questionId)) {
@@ -466,13 +436,11 @@ function updateQuestionNavigation(activeQuestion) {
     });
 }
 
-    // Update the status counter numbers
 function updateStatusCounters() {
     const answeredCount = answeredQuestions.size;                    // Questions submitted
     const visitedCount = visitedQuestions.size - answeredQuestions.size;  // Visited but not answered
     const notVisitedCount = Math.max(0, codingQuestions.length - visitedQuestions.size); // Not seen yet
 
-    // Update display
     document.getElementById('answeredCount').textContent = answeredCount;
     document.getElementById('visitedCount').textContent = visitedCount;
     document.getElementById('notVisitedCount').textContent = notVisitedCount;
@@ -494,23 +462,18 @@ function submitAnswer() {
         const code = inputEditor.getValue();
         console.log(`Submitting answer for question ${currentQuestion}:`, code);
 
-        // Save current question's code and output before marking as answered
         saveCode();
         saveOutput();
 
-        // Mark current question as answered
         answeredQuestions.add(currentQuestion);
 
-        // Update circle color to green (answered)
         const circles = document.querySelectorAll('.circle');
         if (circles[currentQuestion - 1]) {
             circles[currentQuestion - 1].classList.add('answered');
         }
 
-        // Update status counters
         updateStatusCounters();
 
-        // Automatically go to next question after submission
         if (currentQuestion < codingQuestions.length) {
             goToQuestion(currentQuestion + 1);
         }
@@ -521,7 +484,7 @@ function submitAnswer() {
 // EXAM CONTROL FUNCTIONS
 // ========================================
 
-// Replace your existing finishExam() function with this one
+
 function finishExam(skipConfirmation = false) {
     if (skipConfirmation || confirm('Are you sure you want to finish the exam?')) {
         // Stop the timer and monitoring
@@ -531,15 +494,14 @@ function finishExam(skipConfirmation = false) {
         stopActivityMonitoring();
 
 
-        /////////////////////////////////
-        //GRADING AND CALCULATING SCORE//
-        /////////////////////////////////
+// *****************************
+// GRADING AND CALCULATING SCORE
+// *****************************
         
-        const totalQuestions = codingQuestions.length; // Dynamically get from loaded questions array
+        const totalQuestions = codingQuestions.length; 
         const solvedQuestionsCount = answeredQuestions.size;
         const unsolvedQuestionsCount = totalQuestions - solvedQuestionsCount;
 
-        // Helper function to check if an answer is correct
         function isAnswerCorrect(questionId) {
             const userCode = localStorage.getItem(`question_${questionId}_code`);
             const userOutput = localStorage.getItem(`question_${questionId}_output`);
@@ -549,14 +511,12 @@ function finishExam(skipConfirmation = false) {
                 return false;
             }
 
-            // Get the question and its test cases
             const question = codingQuestions.find(q => q.questionNumber === questionId);
             if (!question || !question.testCases) {
                 console.log(`Question ${questionId}: No question or test cases found`);
                 return false;
             }
 
-            // Filter out the note test case and get actual test cases
             const actualTestCases = question.testCases.filter(testCase => 
                 testCase.input && testCase.expectedOutput && !testCase.note
             );
@@ -566,33 +526,25 @@ function finishExam(skipConfirmation = false) {
                 return false;
             }
 
-            // Clean user output (remove extra whitespace, newlines, etc.)
             const cleanUserOutput = userOutput.trim().replace(/\s+/g, ' ');
-
-            // Get all expected outputs from test cases
             const allExpectedOutputs = actualTestCases.map(testCase => 
                 testCase.expectedOutput.trim()
             );
 
             console.log(`Question ${questionId} - User Output: "${cleanUserOutput}"`);
             console.log(`Question ${questionId} - Expected Outputs:`, allExpectedOutputs);
-
-            // Check if user output matches ANY of the expected outputs
-            // For a question to be correct, the user's output should contain at least one expected output
             const anyOutputMatches = allExpectedOutputs.some(expectedOutput => {
-                // Try exact match first
+
                 if (cleanUserOutput.includes(expectedOutput)) {
                     console.log(`Question ${questionId} - Exact match found for: "${expectedOutput}"`);
                     return true;
                 }
                 
-                // Try case-insensitive match
                 if (cleanUserOutput.toLowerCase().includes(expectedOutput.toLowerCase())) {
                     console.log(`Question ${questionId} - Case-insensitive match found for: "${expectedOutput}"`);
                     return true;
                 }
-                
-                // Try matching after removing common formatting differences
+
                 const normalizedUserOutput = cleanUserOutput.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
                 const normalizedExpected = expectedOutput.replace(/[^\w\s]/g, ' ').replace(/\s+/g, ' ').trim();
                 
@@ -616,8 +568,6 @@ function finishExam(skipConfirmation = false) {
 
         const wrongAnswersCount = solvedQuestionsCount - correctAnswersCount;
         const totalScore = totalQuestions > 0 ? Math.round((correctAnswersCount / totalQuestions) * 100) : 0;
-
-        // Create detailed questions analysis for all questions
         const questionsAnalysis = codingQuestions.map(question => {
             const qId = question.questionNumber;
             const isAnswered = answeredQuestions.has(qId);
@@ -639,7 +589,6 @@ function finishExam(skipConfirmation = false) {
             }
         });
 
-        //up-todown
         async function submitTestResults(results) {
             try {
                 const response = await fetch("http://localhost:5000/api/test-results", {
@@ -667,9 +616,8 @@ function finishExam(skipConfirmation = false) {
             }
         }
 
-        // Fetch candidate details from localStorage or a global variable if available
-        const candidateEmail = localStorage.getItem('userEmail'); // Or however you store it
-        const registrationId = localStorage.getItem('registrationId'); // From registration success
+        const candidateEmail = localStorage.getItem('userEmail');
+        const registrationId = localStorage.getItem('registrationId');
 
         if (!candidateEmail || !registrationId) {
             alert("Could not find user information. Cannot submit results.");
@@ -677,7 +625,6 @@ function finishExam(skipConfirmation = false) {
             return;
         }
 
-        // Validate that we have actual results to submit
         if (totalQuestions === 0) {
             alert("No questions were loaded. Cannot submit results.");
             window.location.href = 'Dashboard.html';
@@ -694,10 +641,8 @@ function finishExam(skipConfirmation = false) {
             totalScore
         });
 
-        // Determine exam name based on the language used
         const examLanguage = preferredLanguage || 'cpp';
         const languageName = examLanguage.charAt(0).toUpperCase() + examLanguage.slice(1);
-
         const results = {
             registrationId: registrationId,
             candidateEmail: candidateEmail,
@@ -709,46 +654,29 @@ function finishExam(skipConfirmation = false) {
             unsolvedQuestions: unsolvedQuestionsCount,
             questionsAnalysis: questionsAnalysis,
         };
-
-        // Call the new function to send results to the server
         submitTestResults(results);
-
-        // Make editor read-only after submission
         if (inputEditor) {
             inputEditor.editor.updateOptions({ readOnly: true });
         }
     }
 }
 
-// Warn user if they try to leave during exam (handled in tab switch detection section)
-
 // ========================================
 // INITIALIZATION
 // ========================================
 
-// Set up first question when page loads
 document.addEventListener('DOMContentLoaded', async function () {
-    // Initialize Monaco editors first
     initializeMonacoEditors();
-    
-    // Load questions from JSON file first
     await loadQuestionsFromJSON();
-    
-    // Update total questions count based on loaded questions
     if (codingQuestions.length > 0) {
-        // Update the totalQuestions variable to match loaded questions
         const totalQuestionsElement = document.getElementById('notVisitedCount');
         if (totalQuestionsElement) {
             totalQuestionsElement.textContent = codingQuestions.length;
         }
     }
-    
-    // Mark first question as visited
     visitedQuestions.add(1);
     updateQuestionNavigation(1);
     updateStatusCounters();
-
-    // Initialize language button styles (set C++ as default active)
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.style.backgroundColor = 'rgb(11, 107, 252)';
     });
@@ -756,25 +684,16 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (defaultLangBtn) {
         defaultLangBtn.style.backgroundColor = 'rgb(0, 73, 183)';
     }
-
-    // Now correctly load and display the first question
     goToQuestion(1);
 });
-
-
-
-
 
 // Change programming language
 function changeLanguage(lang) {
     if (!inputEditor) return;
     
-    // If the current question is already submitted, keep code/output intact
     if (answeredQuestions && answeredQuestions.has(currentQuestion)) {
         const lockedLang = localStorage.getItem(`question_${currentQuestion}_language`) || lang;
-        // Only adjust syntax highlighting to the locked language; do not overwrite code
         monaco.editor.setModelLanguage(inputEditor.editor.getModel(), languageMap[lockedLang]);
-        // Reflect locked language in buttons
         document.querySelectorAll('.lang-btn').forEach(btn => { btn.style.backgroundColor = 'rgb(11, 107, 252)'; });
         const lockedBtn = document.getElementById(`btn-${lockedLang}`);
         if (lockedBtn) lockedBtn.style.backgroundColor = 'rgb(0, 73, 183)';
@@ -783,17 +702,13 @@ function changeLanguage(lang) {
     }
 
     preferredLanguage = lang;
-    
-    // If exam has started, set this as the preferred language for all questions
     if (examStarted) {
         preferredLanguage = lang;
         console.log(`Preferred language set to: ${lang} for all questions`);
     }
     
-    // Update Monaco editor language
     monaco.editor.setModelLanguage(inputEditor.editor.getModel(), languageMap[lang]);
     
-    // Update button styles
     document.querySelectorAll('.lang-btn').forEach(btn => {
         btn.style.backgroundColor = 'rgb(11, 107, 252)';
     });
@@ -803,17 +718,14 @@ function changeLanguage(lang) {
         activeBtn.style.backgroundColor = 'rgb(0, 73, 183)';
     }
     
-    // Always replace with the default template for the selected language (for unsubmitted questions)
     const template = inputEditor.getDefaultCode(lang);
     inputEditor.setValue(template);
-    // Persist the language choice and template per question immediately
     localStorage.setItem(`question_${currentQuestion}_language`, lang);
     localStorage.setItem(`question_${currentQuestion}_code`, template);
     
     console.log(`Language changed to: ${lang}`);
 }
 
-// Enhanced code execution with language-specific compilation
 function runCode() {
     const now = Date.now();
     if (now - lastExecutionTime < EXECUTION_COOLDOWN) {
@@ -825,7 +737,6 @@ function runCode() {
     lastExecutionTime = now;
 
     const code = inputEditor.getValue();
-    // Persist the current code immediately so it restores on revisit even without submission
     saveCode();
 
     if (preferredLanguage === "javascript") {
@@ -844,7 +755,6 @@ function runCode() {
 // CODE EXECUTION FUNCTIONS (OUTPUT TERMINAL)
 // ========================================
 
-// Unified function to execute code for all languages
 async function executeCode(language, code) {
     const languageConfig = {
         cpp: {
@@ -895,7 +805,7 @@ async function executeCode(language, code) {
                 /sys\.stdin/g
             ],
             action: "Executing",
-            preprocessor: code => code // No preprocessing needed for Python
+            preprocessor: code => code 
         },
         javascript: {
             name: "JavaScript",
@@ -908,7 +818,7 @@ async function executeCode(language, code) {
                 /process\.stdin/g
             ],
             action: "Executing",
-            preprocessor: code => code // No preprocessing needed for JavaScript
+            preprocessor: code => code 
         }
     };
 
@@ -920,8 +830,6 @@ async function executeCode(language, code) {
 
     terminal.clear();
     terminal.println(`${config.action} ${config.name} code...\n`);
-
-    // Check if code needs input
     let needsInput = false;
     let inputCount = 0;
     
@@ -933,8 +841,6 @@ async function executeCode(language, code) {
         }
     }
 
-    // For JavaScript, do not pre-collect input.
-    // The overridden window.prompt/window.confirm will request input at runtime.
     if (language === 'javascript') {
         needsInput = false;
         inputCount = 0;
@@ -943,8 +849,6 @@ async function executeCode(language, code) {
     let stdin = "";
     if (needsInput) {
     terminal.println(`Program requires ${inputCount} input(s).`);
-    
-    // Handle multiple inputs
     if (inputCount > 1) {
         terminal.println("Enter each input on a separate line:");
         for (let i = 0; i < inputCount; i++) {
@@ -956,20 +860,17 @@ async function executeCode(language, code) {
     }
     }
 
-    // Create and show loading indicator
     const loadingElement = document.createElement('div');
     loadingElement.className = 'loading-indicator';
     loadingElement.textContent = 'Executing code...';
     document.body.appendChild(loadingElement);
     
+    //Local browser for JavaScript Execution//
     try {
         if (language === 'javascript') {
-            // Execute JavaScript locally
             const originalLog = console.log;
             const originalError = console.error;
             const originalWarn = console.warn;
-
-            // Redirect console output to terminal
             const toText = (args) => args.map(a => {
                 if (typeof a === 'string') return a;
                 try { return JSON.stringify(a); } catch { return String(a); }
@@ -977,18 +878,14 @@ async function executeCode(language, code) {
             console.log = (...args) => terminal.println("Output: " + toText(args));
             console.error = (...args) => terminal.println("Error: " + toText(args));
             console.warn = (...args) => terminal.println("Warning: " + toText(args));
-
-            // Handle prompt input with proper input management
             const originalPrompt = window.prompt;
             const originalConfirm = window.confirm;
             
-            // Create a queue for inputs
             let inputQueue = [];
             if (stdin.trim()) {
                 inputQueue = stdin.trim().split('\n');
             }
             
-            // Support both awaited and non-awaited prompt usage
             window.prompt = (msg) => {
                 const p = new Promise((resolve) => {
                     if (inputQueue.length > 0) {
@@ -1020,7 +917,6 @@ async function executeCode(language, code) {
             };
 
             try {
-                // Execute the code in a proper context
                 const result = await new Function(`
                     return (async () => {
                         try {
@@ -1030,8 +926,6 @@ async function executeCode(language, code) {
                         }
                     })();
                 `)();
-                
-                // If the function returns a value, display it
                 if (result !== undefined) {
                     terminal.println("Return value: " + result);
                 }
@@ -1041,20 +935,18 @@ async function executeCode(language, code) {
                     terminal.println(`Stack trace: ${err.stack.split('\n').slice(0, 3).join('\n')}`);
                 }
             } finally {
-                // Restore original console functions
                 console.log = originalLog;
                 console.error = originalError;
                 console.warn = originalWarn;
                 window.prompt = originalPrompt;
                 window.confirm = originalConfirm;
-                // Persist output for the current question (JS branch)
+    
                 saveOutput();
             }
         } else {
             const processedCode = typeof config.preprocessor === 'function' ? config.preprocessor(code) : code;
             const result = await executeJudge0(config.id, processedCode, stdin);
             
-            // Clear previous output
             terminal.clear();
             terminal.println(`Execution Results:`);
             terminal.println("=================================");
@@ -1064,7 +956,6 @@ async function executeCode(language, code) {
                 return;
             }
 
-            // Structure output based on status
             terminal.println(`Status: ${result.statusName || 'Unknown'}`);
             
             if (result.stdout) {
@@ -1092,7 +983,6 @@ async function executeCode(language, code) {
             terminal.println("\n=================================");
             terminal.println("Execution completed");
             
-            // Save output for current question
             saveOutput();
         }
     } catch (error) {
@@ -1129,18 +1019,15 @@ function clearOutput() {
 // CODE SAVE/LOAD FUNCTIONS
 // ========================================
 
-// Save current code to browser storage
 function saveCode() {
     if (inputEditor) {
         const code = inputEditor.getValue();
         localStorage.setItem(`question_${currentQuestion}_code`, code);
-        // Persist the active language at the time of saving
         localStorage.setItem(`question_${currentQuestion}_language`, preferredLanguage);
         console.log(`Auto-saved code for question ${currentQuestion}`);
     }
 }
 
-// Save output for current question
 function saveOutput() {
     if (terminal && terminal.getOutput) {
         const output = terminal.getOutput();
@@ -1149,26 +1036,24 @@ function saveOutput() {
     }
 }
 
-// Load output for a specific question
+
 function loadOutput(questionId) {
     const savedOutput = localStorage.getItem(`question_${questionId}_output`);
     if (terminal) {
         if (savedOutput && savedOutput.trim()) {
             terminal.setOutput(savedOutput);
         } else {
-            // Load default placeholder
             terminal.clear();
             terminal.println('Click "Run Code" to execute your program...');
         }
     }
 }
 
-// Load code for a specific question
+
 function loadCode(questionId) {
     const savedCode = localStorage.getItem(`question_${questionId}_code`);
     const savedLang = localStorage.getItem(`question_${questionId}_language`);
     if (inputEditor) {
-        // Restore language first for proper syntax highlighting
         const langToUse = savedLang || preferredLanguage;
         monaco.editor.setModelLanguage(inputEditor.editor.getModel(), languageMap[langToUse]);
 
@@ -1179,7 +1064,6 @@ function loadCode(questionId) {
         }
     }
 
-    // Also load the saved output
     loadOutput(questionId);
 }
 
@@ -1188,10 +1072,10 @@ function loadCode(questionId) {
 // ===============================
 // FULLSCREEN FUNCTIONALITY
 // ===============================
+
 function openFullscreen() {
     const elem = document.documentElement;
     
-    // Try different fullscreen methods for browser compatibility
     if (elem.requestFullscreen) {
         elem.requestFullscreen();
     } else if (elem.webkitRequestFullscreen) { // Safari
@@ -1203,8 +1087,6 @@ function openFullscreen() {
     }
 }
 
-// Show modal and require user gesture to enter fullscreen
-
     document.addEventListener('DOMContentLoaded', function () {
         const modal = document.getElementById('fullscreen-modal');
         const btn = document.getElementById('start-fullscreen-btn');
@@ -1213,33 +1095,30 @@ function openFullscreen() {
             btn.addEventListener('click', function () {
                 openFullscreen();
                 if (modal) modal.style.display = 'none';
-                // Start the exam when user clicks start button
                 startExam();
-                // Automatically show question 1 when exam starts
                 goToQuestion(1);
             });
         }
     });
 
-// CSS handles layout in and out of fullscreen; no JS resizing needed
+
 // ========================================
 // SECURITY MEASURES
 // ========================================
 
 // Prevent screenshots, developer tools, and right-click
 document.addEventListener("keydown", function (e) {
-    // Detect PrintScreen
+   
     if (e.key === "PrintScreen") {
         alert("Screenshot is disabled!");
-        navigator.clipboard.writeText(" "); // Clears copied screenshot
+        navigator.clipboard.writeText(" "); 
     }
 
-    // Block common dev tools shortcuts
     if (
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") || // Ctrl+Shift+I
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j") || // Ctrl+Shift+J
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") || // Ctrl+Shift+C
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "p") || // Ctrl+Shift+P
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "i") || 
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "j") || 
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "c") || 
+        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === "p") || 
         (e.ctrlKey && e.key.toLowerCase() === "u") || 
         (e.ctrlKey && e.key.toLowerCase() === "f") || 
         (e.ctrlKey && e.key.toLowerCase() === "v") || 
@@ -1267,7 +1146,6 @@ document.addEventListener("keydown", function (e) {
     }
 });
 
-// Block right-click
 document.addEventListener("contextmenu", (e) => {
     e.preventDefault();
     alert("Right-click is disabled!");
@@ -1276,23 +1154,21 @@ document.addEventListener("contextmenu", (e) => {
 // ===============================
 // TAB SWITCH DETECTION
 // ===============================
+
 let lastFocusTime = Date.now();
 let focusCheckInterval;
 
-// Primary tab switch detection using visibilitychange
+
 document.addEventListener("visibilitychange", () => {
     console.log("Visibility changed - hidden:", document.hidden, "state:", document.visibilityState, "examStarted:", examStarted, "tabSwitchDetected:", tabSwitchDetected);
 
-    // Immediate detection when tab becomes hidden
     if (document.hidden && examStarted && !tabSwitchDetected) {
         console.log("Tab switch detected - terminating exam");
         tabSwitchDetected = true;
         alert("Tab switch detected. Your session will be terminated.");
-        finishExam(true); // Skip confirmation dialog
+        finishExam(true); 
         return;
     }
-
-    // Additional check for when visibility state changes to 'hidden'
     if (document.visibilityState === 'hidden' && examStarted && !tabSwitchDetected) {
         console.log("Visibility state hidden detected - terminating exam");
         tabSwitchDetected = true;
@@ -1301,7 +1177,7 @@ document.addEventListener("visibilitychange", () => {
     }
 });
 
-// Additional tab switch detection using pagehide event
+//Same browser tab switch detection//
 window.addEventListener("pagehide", (event) => {
     if (examStarted && !tabSwitchDetected) {
         console.log("Page hide detected - terminating exam");
@@ -1310,17 +1186,15 @@ window.addEventListener("pagehide", (event) => {
     }
 });
 
-// Prevent tab switching using beforeunload
 window.addEventListener("beforeunload", function (e) {
     if (examStarted) {
         saveCode(); // Save before leaving
         e.preventDefault();
-        e.returnValue = 'Your exam is still in progress. Are you sure you want to leave?';
         return 'Your exam is still in progress. Are you sure you want to leave?';
     }
 });
 
-// Enhanced detection for window blur and focus
+
 window.addEventListener("blur", () => {
     if (examStarted && !tabSwitchDetected) {
         console.log("Window blur detected - starting focus monitoring");
@@ -1336,7 +1210,6 @@ window.addEventListener("focus", () => {
     }
 });
 
-// Monitor focus changes more aggressively
 function startFocusMonitoring() {
     if (focusCheckInterval) {
         clearInterval(focusCheckInterval);
@@ -1347,7 +1220,6 @@ function startFocusMonitoring() {
             const currentTime = Date.now();
             const timeSinceLastFocus = currentTime - lastFocusTime;
 
-            // If more than 2 seconds have passed since last focus, consider it a tab switch
             if (timeSinceLastFocus > 2000 && !document.hasFocus()) {
                 console.log("Focus monitoring detected tab switch - terminating exam");
                 tabSwitchDetected = true;
@@ -1356,7 +1228,7 @@ function startFocusMonitoring() {
                 finishExam(true);
             }
         }
-    }, 500); // Check every 500ms
+    }, 500);
 }
 
 function stopFocusMonitoring() {
@@ -1366,7 +1238,6 @@ function stopFocusMonitoring() {
     }
 }
 
-// Additional detection using document focus events
 document.addEventListener("focusin", () => {
     if (examStarted) {
         lastFocusTime = Date.now();
@@ -1381,7 +1252,6 @@ document.addEventListener("focusout", () => {
     }
 });
 
-// Mouse leave detection (when mouse leaves the window)
 document.addEventListener("mouseleave", () => {
     if (examStarted && !tabSwitchDetected) {
         console.log("Mouse leave detected - starting monitoring");
@@ -1389,7 +1259,6 @@ document.addEventListener("mouseleave", () => {
     }
 });
 
-// Reset tab switch detection when exam starts
 function resetTabSwitchDetection() {
     tabSwitchDetected = false;
     lastFocusTime = Date.now();
@@ -1397,7 +1266,6 @@ function resetTabSwitchDetection() {
     startActivityMonitoring();
 }
 
-// Monitor user activity to detect tab switches
 let lastActivityTime = Date.now();
 let activityCheckInterval;
 
@@ -1406,10 +1274,8 @@ function startActivityMonitoring() {
         clearInterval(activityCheckInterval);
     }
 
-    // Reset activity time
     lastActivityTime = Date.now();
 
-    // Monitor for user activity
     const activityEvents = ['mousedown', 'mousemove', 'keypress', 'scroll', 'click', 'touchstart'];
     activityEvents.forEach(eventType => {
         document.addEventListener(eventType, () => {
@@ -1419,13 +1285,11 @@ function startActivityMonitoring() {
         }, { passive: true });
     });
 
-    // Check for inactivity and document state every second
     activityCheckInterval = setInterval(() => {
         if (examStarted && !tabSwitchDetected) {
             const currentTime = Date.now();
             const timeSinceLastActivity = currentTime - lastActivityTime;
 
-            // Check if document is hidden or not focused
             if (document.hidden || !document.hasFocus()) {
                 console.log("Periodic check detected tab switch - hidden:", document.hidden, "focused:", document.hasFocus());
                 tabSwitchDetected = true;
@@ -1435,7 +1299,6 @@ function startActivityMonitoring() {
                 return;
             }
 
-            // If no activity for more than 3 seconds and page is not focused, consider it a tab switch
             if (timeSinceLastActivity > 3000 && !document.hasFocus() && document.hidden) {
                 console.log("Activity monitoring detected tab switch - terminating exam");
                 tabSwitchDetected = true;
