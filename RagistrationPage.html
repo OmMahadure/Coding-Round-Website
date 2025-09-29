@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registration – Coding Test</title>
   <style>
     :root {
@@ -13,29 +13,34 @@
       --input-bg: #fff;
       --input-border: #ccd5db;
       --label-color: #333;
-      --help-color: #6c757d;
     }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-y: auto;
+    }
     body {
       font-family: sans-serif;
       background: linear-gradient(180deg, #b4cde9 0%, #0f1c2e 100%);
       color: var(--dark);
-      height: 100vh;
-      width: 100vw;
       display: flex;
       align-items: center;
       justify-content: center;
-      position: relative;
-      margin: 0;
-      padding: 0;
+      min-height: 100vh;
     }
     .container {
       width: clamp(663px, 37vw, 664px);
-      height: min(91%, 860px);
+      max-height: 90vh;
       margin: 20px;
       background: var(--bg);
       border-radius: 10px;
-      overflow: hidden;
+      overflow-y: auto;
       position: relative;
       padding: 5px;
       box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -47,7 +52,6 @@
       background: var(--light);
       padding: 15px 30px;
     }
-    header .brand { font-weight: bold; font-size: 1.1rem; }
     header nav a {
       margin-left: 20px;
       color: var(--dark);
@@ -66,7 +70,8 @@
       align-items: center;
     }
     .circle {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: var(--light);
       color: var(--dark);
@@ -93,7 +98,6 @@
     }
     main {
       padding: 20px 40px 19px 40px;
-      height: 83%;
       width: 100%;
     }
     h1 {
@@ -111,11 +115,9 @@
     }
     form {
       width: 100%;
-      height: 92%;
       margin: 0 auto;
     }
-    .form-container{
-      height: 100%;
+    .form-container {
       width: 100%;
       margin: 0 auto;
       display: flex;
@@ -137,7 +139,8 @@
       font-size: 0.9rem;
       color: var(--label-color);
     }
-    input, select {
+    input,
+    select {
       padding: 12px;
       background: var(--input-bg);
       border: 1px solid var(--input-border);
@@ -147,8 +150,7 @@
     input[type="date"] {
       font-size: 0.95rem;
     }
-
-    .btn-container{
+    .btn-container {
       margin-top: 20px;
       width: 100%;
     }
@@ -174,9 +176,15 @@
       border-bottom-left-radius: 10px;
     }
     @media (max-width: 768px) {
-      .connector { flex: 0 0 60px; }
-      main { padding: 20px; }
-      .form-row { flex-direction: column; }
+      .connector {
+        flex: 0 0 60px;
+      }
+      main {
+        padding: 20px;
+      }
+      .form-row {
+        flex-direction: column;
+      }
     }
   </style>
 </head>
@@ -208,54 +216,68 @@
     <main>
       <div class="sidebar-accent"></div>
       <h1>Register for the Coding Test</h1>
-      <form onsubmit="submitToBackend(event)">
-        <div class="form-container">  
-        <div class="form-row">
-          <div class="field-group">
-            <label for="email">Email address</label>
-            <input id="email" type="email" placeholder="Enter email address" required>
+      <form id="registrationForm">
+        <div class="form-container">
+          <div class="form-row">
+            <div class="field-group">
+              <label for="email">Email address</label>
+              <input id="email" type="email" placeholder="Enter email address" required />
+            </div>
+            <div class="field-group">
+              <label for="dob">Date of Birth</label>
+              <input id="dob" type="date" required />
+            </div>
           </div>
-          <div class="field-group">
-            <label for="dob">Date of Birth</label>
-            <input id="dob" type="date" required>
+          <div class="form-row">
+            <div class="field-group">
+              <label for="fullname">Full Name</label>
+              <input id="fullname" type="text" placeholder="Enter your full name" required />
+            </div>
+            <div class="field-group">
+              <label for="contact">Contact Number</label>
+              <input
+                id="contact"
+                type="tel"
+                inputmode="numeric"
+                placeholder="+91 98765 43210"
+                title="Enter mobile number"
+                required
+              />
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="field-group">
+              <label for="gender">Gender</label>
+              <select id="gender" required>
+                <option value="" disabled selected>Select Gender</option>
+                <option>Male</option>
+                <option>Female</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="field-group">
+              <label for="school">College / University</label>
+              <input
+                id="school"
+                type="text"
+                placeholder="Enter your college/university name"
+                required
+              />
+            </div>
+          </div>
+          <div class="btn-container">
+            <button type="submit" class="btn-register">Register</button>
           </div>
         </div>
-        <div class="form-row">
-          <div class="field-group">
-            <label for="fullname">Full Name</label>
-            <input id="fullname" type="text" placeholder="Enter your full name" required>
-          </div>
-          <div class="field-group">
-            <label for="contact">Contact Number</label>
-            <input id="contact" type="tel" inputmode="numeric" placeholder="+91 98765 43210" 
-                   title="Enter mobile number"
-                   required>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="field-group">
-            <label for="gender">Gender</label>
-            <select id="gender" required>
-              <option value="" disabled selected>Select Gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Other</option>
-            </select>
-          </div>
-          <div class="field-group">
-            <label for="school">College / University</label>
-            <input id="school" type="text" placeholder="Enter your college/university name" required>
-          </div>
-        </div>
-        <div class="btn-container">
-          <button type="submit" class="btn-register">Register</button>
-        </div>
-      </div>
       </form>
     </main>
   </div>
   <script>
-    async function submitToBackend(event) {
+    // Attach event listener after DOM loads
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('registrationForm');
+
+      form.addEventListener('submit', async (event) => {
         event.preventDefault();
 
         const fullname = document.getElementById('fullname').value;
@@ -266,40 +288,34 @@
         const school = document.getElementById('school').value;
 
         const formData = { fullname, email, dob, contact, gender, school };
-        
+
         try {
-            const response = await fetch('http://localhost:5000/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
-            });
+          const response = await fetch('http://localhost:5000/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData),
+          });
 
-            const responseData = await response.json(); // Always parse the JSON response
+          const responseData = await response.json();
 
-            if (response.ok) {
-                alert("Registration successful!");
-                localStorage.setItem('userName', fullname);
-                localStorage.setItem('userEmail', email);
-                localStorage.setItem('registrationId', responseData.id); // Store the registration ID
-                window.location.href = `T&CPage.html`;
-            } else {
-                // The server returned a non-OK status, which is the "Email already registered" case
-                alert(`Registration failed: ${responseData.message}`);
-                console.error('Server responded with an error:', responseData.message);
-            }
+          if (response.ok) {
+            alert("Registration successful!");
+            localStorage.setItem('userName', fullname);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('registrationId', responseData.id);
+            window.location.href = `T&CPage.html`;
+          } else {
+            alert(`Registration failed: ${responseData.message}`);
+            console.error('Server responded with an error:', responseData.message);
+          }
         } catch (error) {
-            console.error("Network error during registration:", error);
-            alert("Could not connect to server. Please check your internet connection and ensure the server is running.");
+          console.error("Network error during registration:", error);
+          alert("Could not connect to server. Please check your internet connection and ensure the server is running.");
         }
-    }
-
-    // Add the event listener to your form if you haven't already
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('registrationForm'); // Make sure your form has this ID
-        if (form) {
-            form.addEventListener('submit', submitToBackend);
-        }
+      });
     });
-</script>
+  </script>
+</body>
+</html>
