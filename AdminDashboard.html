@@ -210,7 +210,7 @@
 
             try {
                 console.log('Fetching data from backend...');
-                const response = await fetch('http://localhost:5000/api/admin/dashboard');
+                const response = await fetch('https://coding-round-website.onrender.com/api/admin/dashboard');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
