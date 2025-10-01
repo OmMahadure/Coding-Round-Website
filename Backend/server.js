@@ -5,9 +5,6 @@ const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 5000; // Use Render's assigned port or fallback
-app.listen(port, '0.0.0.0', () => {
-  console.log(`Server running on port ${port}`);
-});
 
 // Middleware
 app.use(cors());
@@ -247,15 +244,15 @@ app.get('/api/debug/email-matching', async (req, res) => {
   }
 });
 
-// Start the server
+// Start the server only after MongoDB connection is ready
 async function startServer() {
   await connectToMongo();
 
   // Uncomment ONLY ONCE to setup the admin user. Then comment out again.
   // await setupAdminUser();
 
-  app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Server is running on port ${port}`);
   });
 }
 
