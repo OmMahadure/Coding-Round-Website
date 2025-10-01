@@ -591,7 +591,7 @@ function finishExam(skipConfirmation = false) {
 
         async function submitTestResults(results) {
             try {
-                const response = await fetch("https://coding-round-website.onrender.com/api/user/results", {
+                const response = await fetch("https://coding-round-website.onrender.com/api/test-results", {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
